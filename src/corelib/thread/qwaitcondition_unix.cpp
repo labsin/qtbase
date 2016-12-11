@@ -121,6 +121,10 @@ public:
 
     int wait_relative(unsigned long time)
     {
+        // TODO Emscripten specialization could perhaps be replaced with pthread stubs
+#if defined(Q_OS_EMSCRIPTEN)
+        return 0;
+#endif
         timespec ti;
 #ifdef Q_OS_ANDROID
         if (local_cond_timedwait_relative) {
@@ -135,6 +139,10 @@ public:
 
     bool wait(unsigned long time)
     {
+        // TODO Emscripten specialization could perhaps be replaced with pthread stubs
+#if defined(Q_OS_EMSCRIPTEN)
+        return true;
+#endif
         int code;
         forever {
             if (time != ULONG_MAX) {
@@ -201,6 +209,10 @@ void QWaitCondition::wakeAll()
 
 bool QWaitCondition::wait(QMutex *mutex, unsigned long time)
 {
+    // TODO Emscripten specialization could perhaps be replaced with pthread stubs
+#if defined(Q_OS_EMSCRIPTEN)
+    return true;
+#endif
     if (! mutex)
         return false;
     if (mutex->isRecursive()) {
@@ -221,6 +233,10 @@ bool QWaitCondition::wait(QMutex *mutex, unsigned long time)
 
 bool QWaitCondition::wait(QReadWriteLock *readWriteLock, unsigned long time)
 {
+    // TODO Emscripten specialization could perhaps be replaced with pthread stubs
+#if defined(Q_OS_EMSCRIPTEN)
+    return true;
+#endif
     if (!readWriteLock)
         return false;
     auto previousState = readWriteLock->stateForWaitCondition();

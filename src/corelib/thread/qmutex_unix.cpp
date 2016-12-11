@@ -78,6 +78,10 @@ QMutexPrivate::~QMutexPrivate()
 
 bool QMutexPrivate::wait(int timeout)
 {
+    // TODO Emscripten specialization could perhaps be replaced with pthread stubs
+#if defined(Q_OS_NACL_EMSCRIPTEN) && !defined(Q_OS_NACL_EMSCRIPTEN_PTHREADS)
+    return false;
+#endif
     int errorCode;
     if (timeout < 0) {
         do {
