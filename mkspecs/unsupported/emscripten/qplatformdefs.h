@@ -48,12 +48,9 @@
 
 #define QT_NO_SOCKET_H
 
-#define QT_NO_SYSTEMSEMAPHORE
-#define QT_NO_PROCESS
-#define QT_NO_SHAREDMEMORY
-
-#undef QT_OPEN_LARGEFILE
-#define QT_OPEN_LARGEFILE       0
+//#define QT_NO_SYSTEMSEMAPHORE
+//#define QT_NO_PROCESS
+//#define QT_NO_SHAREDMEMORY
 
 
 // 1) need to reset default environment if _BSD_SOURCE is defined
@@ -89,8 +86,10 @@
 #include <net/if.h>
 #endif
 
-#define QT_USE_XOPEN_LFS_EXTENSIONS
-#include "../common/posix/qplatformdefs.h"
+#include "../../common/posix/qplatformdefs.h"
+
+#undef QT_OPEN_LARGEFILE
+#define QT_OPEN_LARGEFILE       0
 
 #undef QT_SOCKLEN_T
 
