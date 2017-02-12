@@ -61,8 +61,8 @@
 
 #if defined(Q_OS_MAC)
 # include <mach/semaphore.h>
-#elif defined(Q_OS_LINUX) && !defined(QT_LINUXBASE)
-// use Linux mutexes everywhere except for LSB builds
+#elif defined(Q_OS_LINUX) && !defined(QT_LINUXBASE) && !defined(Q_OS_EMSCRIPTEN)
+// use Linux mutexes everywhere except for LSB builds and emscripten
 #  define QT_LINUX_FUTEX
 #elif defined(Q_OS_UNIX)
 # if _POSIX_VERSION-0 >= 200112L || _XOPEN_VERSION-0 >= 600

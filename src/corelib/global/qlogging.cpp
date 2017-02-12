@@ -97,7 +97,7 @@
 extern char *__progname;
 #endif
 
-#if defined(Q_OS_LINUX) && (defined(__GLIBC__) || QT_HAS_INCLUDE(<sys/syscall.h>))
+#if defined(Q_OS_LINUX) && !defined(Q_OS_EMSCRIPTEN) && (defined(__GLIBC__) || QT_HAS_INCLUDE(<sys/syscall.h>))
 #  include <sys/syscall.h>
 
 # if defined(Q_OS_ANDROID) && !defined(SYS_gettid)

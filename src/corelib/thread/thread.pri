@@ -51,7 +51,7 @@ win32 {
 } else {
     darwin {
         SOURCES += thread/qmutex_mac.cpp
-    } else: linux {
+    } else: linux : !emscripten {
         SOURCES += thread/qmutex_linux.cpp
     } else {
         SOURCES += thread/qmutex_unix.cpp

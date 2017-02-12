@@ -191,6 +191,7 @@ qtConfig(gui) {
 SUBDIRS += src_plugins
 
 nacl: SUBDIRS -= src_network src_testlib
+emscripten: SUBDIRS -= src_network src_testlib
 
 android: SUBDIRS += src_android
 

@@ -175,7 +175,7 @@
 
     X86 is little-endian.
 */
-#elif defined(__i386) || defined(__i386__) || defined(_M_IX86)
+#elif defined(__i386) || defined(__i386__) || defined(_M_IX86) || defined(__EMSCRIPTEN__)
 #  define Q_PROCESSOR_X86_32
 #  define Q_BYTE_ORDER Q_LITTLE_ENDIAN
 #  define Q_PROCESSOR_WORDSIZE   4
@@ -192,7 +192,8 @@
 
 #  if defined(_M_IX86)
 #    define Q_PROCESSOR_X86     (_M_IX86/100)
-#  elif defined(__i686__) || defined(__athlon__) || defined(__SSE__) || defined(__pentiumpro__)
+#  elif defined(__i686__) || defined(__athlon__) || defined(__SSE__) || defined(__pentiumpro__) || defined(__EMSCRIPTEN__)
+
 #    define Q_PROCESSOR_X86     6
 #  elif defined(__i586__) || defined(__k6__) || defined(__pentium__)
 #    define Q_PROCESSOR_X86     5
