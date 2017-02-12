@@ -77,6 +77,8 @@
 #elif defined(__ghs)
 // Green Hills toolchain uses a 64bit wide floating point stack
 #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
+#elif defined(__EMSCRIPTEN__)
+#undef DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS
 #else
 #error Target architecture was not detected as supported by Double-Conversion.
 #endif
