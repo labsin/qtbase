@@ -571,7 +571,7 @@
         },
         "largefile": {
             "label": "Large file support",
-            "condition": "!config.android && !config.integrity && !config.winrt",
+            "condition": "!config.android && !config.integrity && !config.winrt && !config.emscripten",
             "output": [
                 "privateConfig",
                 { "type": "define", "name": "QT_LARGEFILE_SUPPORT", "value": 64 }
