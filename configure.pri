@@ -74,24 +74,26 @@ defineTest(qtConfTest_architecture) {
 
     test = $$eval($${1}.test)
     test_out_dir = $$shadowed($$QMAKE_CONFIG_TESTS_DIR/$$test)
-    unix:exists($$test_out_dir/arch): \
+    emscripten:!$$host:exists($$test_out_dir/arch.js): \
+        content = $$cat($$test_out_dir/libarch.js, blob)
+    else:unix:exists($$test_out_dir/arch): \
         content = $$cat($$test_out_dir/arch, blob)
     else: win32:exists($$test_out_dir/arch.exe): \
         content = $$cat($$test_out_dir/arch.exe, blob)
     else: android:exists($$test_out_dir/libarch.so): \
         content = $$cat($$test_out_dir/libarch.so, blob)
-    else: emscripten:exists($$test_out_dir/arch.js): \
-        content = $$cat($$test_out_dir/libarch.js, blob)
     else: \
         error("$$eval($${1}.label) detection binary not found.")
 
     arch_magic = ".*==Qt=magic=Qt== Architecture:([^\\0]*).*"
     subarch_magic = ".*==Qt=magic=Qt== Sub-architecture:([^\\0]*).*"
 
-    !emscripten: !contains(content, $$arch_magic)|!contains(content, $$subarch_magic): \
-        error("$$eval($${1}.label) detection binary does not contain expected data.")
+    !emscripten | $$host: {
+        !contains(content, $$arch_magic) | !contains(content, $$subarch_magic): \
+            error("$$eval($${1}.label) detection binary does not contain expected data.")
+    }
 
-    !$$host: emscripten: {
+    emscripten: !$$host {
             $${1}.arch = "i386"
             $${1}.subarch = "sse sse2"
             $${1}.subarch = $$split($${1}.subarch, " ")
