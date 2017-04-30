@@ -1164,8 +1164,13 @@ void UnixMakefileGenerator::init2()
                 bundle_loc += "/";
             project->values("TARGET").first().prepend(project->first("QMAKE_BUNDLE") + bundle_loc);
         }
-        if(!project->isEmpty("TARGET"))
+        if(!project->isEmpty("TARGET")) {
             project->values("TARGET").first().prepend(project->first("DESTDIR"));
+            //EMSCRIPTEN: QMAKE_EXTENSION_EXE should be set to js or html with emscripten
+            if(project->isActiveConfig("emscripten")) {
+                project->values("TARGET").first() += "." + project->first("QMAKE_EXTENSION_EXE");
+            }
+        }
     } else if (project->isActiveConfig("staticlib")) {
         project->values("TARGET").first().prepend(project->first("QMAKE_PREFIX_STATICLIB"));
         project->values("TARGET").first() += "." + project->first("QMAKE_EXTENSION_STATICLIB");
