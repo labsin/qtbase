@@ -66,6 +66,9 @@ defineReplace(qtConfFunc_crossCompile) {
 # custom tests
 
 defineTest(qtConfTest_architecture) {
+    host = $$eval($${1}.host)
+    isEmpty(host): host = false
+
     !qtConfTest_compile($${1}): \
         error("Could not determine $$eval($${1}.label). See config.log for details.")
 
@@ -77,18 +80,28 @@ defineTest(qtConfTest_architecture) {
         content = $$cat($$test_out_dir/arch.exe, blob)
     else: android:exists($$test_out_dir/libarch.so): \
         content = $$cat($$test_out_dir/libarch.so, blob)
+    else: emscripten:exists($$test_out_dir/arch.js): \
+        content = $$cat($$test_out_dir/libarch.js, blob)
     else: \
         error("$$eval($${1}.label) detection binary not found.")
 
     arch_magic = ".*==Qt=magic=Qt== Architecture:([^\\0]*).*"
     subarch_magic = ".*==Qt=magic=Qt== Sub-architecture:([^\\0]*).*"
 
-    !contains(content, $$arch_magic)|!contains(content, $$subarch_magic): \
+    !emscripten: !contains(content, $$arch_magic)|!contains(content, $$subarch_magic): \
         error("$$eval($${1}.label) detection binary does not contain expected data.")
 
-    $${1}.arch = $$replace(content, $$arch_magic, "\\1")
-    $${1}.subarch = $$replace(content, $$subarch_magic, "\\1")
-    $${1}.subarch = $$split($${1}.subarch, " ")
+    !$$host: emscripten: {
+            $${1}.arch = "i386"
+            $${1}.subarch = "sse sse2"
+            $${1}.subarch = $$split($${1}.subarch, " ")
+    }
+    else: {
+        $${1}.arch = $$replace(content, $$arch_magic, "\\1")
+        $${1}.subarch = $$replace(content, $$subarch_magic, "\\1")
+        $${1}.subarch = $$split($${1}.subarch, " ")
+    }
+
     export($${1}.arch)
     export($${1}.subarch)
     qtLog("Detected architecture: $$eval($${1}.arch) ($$eval($${1}.subarch))")
